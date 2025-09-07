@@ -40,14 +40,15 @@ torchrun \
     adv.norm_var=true \
     adv.global_norm=true \
     \
-    rollout.rollout_class=gem_rollout.GEMRollout \
+    rollout.agent_class=gem_agent.GEMAgent \
     rollout.model_name=Qwen/Qwen3-1.7B-Base \
     rollout.tp_size=1 \
     rollout.train_sampling_params.max_new_tokens=8192 \
-    +rollout.gem_env.env_id=${env} \
-    +rollout.gem_env.wrappers="" \
-    +rollout.gem_env.num_env=16 \
-    +rollout.gem_env.async_env=true \
-    +rollout.gem_env.prompt_template=qwen3_general \
-    +rollout.gem_env.rollout_batch_size=${batch_size} \
-    +rollout.gem_env.max_model_len=12800
+    +rollout.gamma=1.0 \
+    +rollout.env_id=${env} \
+    +rollout.wrappers="" \
+    +rollout.max_parallel_agents=16 \
+    +rollout.prompt_template=qwen3_general \
+    +rollout.apply_chat_template=false \
+    +rollout.rollout_batch_size=${batch_size} \
+    +rollout.max_model_len=12800
