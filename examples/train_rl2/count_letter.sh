@@ -1,54 +1,36 @@
 #!/bin/bash
-
-# GEM Environment PPO Training Example for RL2
-# Uses configuration-driven rollout class selection
-# Aligned with VeRL training configuration (only matching parameters)
-
-# Configuration variables
 n_gpus=8
 batch_size=128
 env=rg:letter_counting
 
-# Set logging to DEBUG mode for detailed vectorized environment tracking
 export PYTHONUNBUFFERED=1
 export CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7
 export PYTHONPATH="${PYTHONPATH}:$(pwd)/RL2"
 
-# Run PPO training with GEM environment
 torchrun \
-    --nproc_per_node=$n_gpus \
+    --nproc_per_node=8 \
     -m RL2.trainer.ppo \
-    \
-    trainer.project=gem \
-    trainer.experiment_name=rl2-qwen3-1.7b-${env} \
-    trainer.n_epochs=500 \
-    trainer.test_freq=9999999 \
-    trainer.save_freq=9999999 \
-    \
+    train_data.path=null \
+    train_data.prompts_per_rollout=512 \
     train_data.responses_per_prompt=1 \
-    train_data.prompts_per_rollout=1 \
-    \
     actor.model_name=Qwen/Qwen3-1.7B-Base \
-    actor.lr=1e-6 \
-    actor.max_length_per_device=8192 \
     actor.sp_size=2 \
+    actor.max_length_per_device=8192 \
+    actor.tis_coef=2.0 \
     actor.update_per_rollout=2 \
     actor.warmup_ratio=0.0 \
-    actor.tis_coef=2.0 \
-    \
-    adv.estimator=reinforce \
-    adv.norm_var=true \
-    adv.global_norm=true \
-    \
-    rollout.agent_class=gem_agent.GEMAgent \
-    rollout.model_name=Qwen/Qwen3-1.7B-Base \
-    rollout.tp_size=1 \
+    actor.lr=1e-6 \
     rollout.train_sampling_params.max_new_tokens=8192 \
-    +rollout.gamma=1.0 \
-    +rollout.env_id=${env} \
-    +rollout.wrappers="" \
-    +rollout.max_parallel_agents=16 \
-    +rollout.prompt_template=qwen3_general \
-    +rollout.apply_chat_template=false \
-    +rollout.rollout_batch_size=${batch_size} \
-    +rollout.max_model_len=12800
+    rollout.train_sampling_params.temperature=1.0 \
+    rollout.env_path=async_env.py \
+    rollout.max_turns=16 \
+    rollout.dynamic_filtering=false \
+    adv.estimator=reinforce \
+    adv.global_norm=true \
+    adv.norm_var=true \
+    trainer.project=gem \
+    trainer.experiment_name=gem-qwen3-1.7b-reinforce-language-games \
+    trainer.n_epochs=500 \
+    trainer.test_freq=9999999 \
+    trainer.save_freq=64 \
+    trainer.use_wandb=true
