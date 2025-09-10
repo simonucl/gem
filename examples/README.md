@@ -7,6 +7,7 @@ As of now, we support the following training frameworks:
 - [x] [Oat](https://github.com/sail-sg/oat)
 - [x] [Verl](https://github.com/volcengine/verl)
 - [x] [OpenRLHF](https://github.com/OpenRLHF/OpenRLHF)
+- [x] [RL2](https://github.com/ChenmienTan/RL2)
 
 The learning curve comparison for two representative environments is shown below, where we observe that their curves are nearly aligned—demonstrating our goal of achieving interoperability.
 
