@@ -7,8 +7,8 @@ import gem
 from gem.wrappers.wrapper_factory import get_wrapper_fns
 
 NUM_ENVS = 16
-GAME = "game:GuessTheNumber-v0"
-WRAPPERS = "concat"
+GAME = "rg:letter_counting"
+WRAPPERS = ""
 PROMPT_TEMPLATE = "qwen3_general"
 ENV_POOL = []
 ENV_LOCKS = []
@@ -86,7 +86,7 @@ async def reset(extra_info: Dict[str, Any], **kwargs) -> str:
     env_idx = await acquire_env_lock(extra_info)
     
     try:
-        observation, _ = ENV_POOL[env_idx].reset(seed=233 + env_idx)
+        observation, _ = ENV_POOL[env_idx].reset()
 
         formatted_observation = TEMPLATE_FACTORY[PROMPT_TEMPLATE](observation)
         

@@ -5,32 +5,22 @@ env=rg:letter_counting
 
 export PYTHONUNBUFFERED=1
 export CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7
-export PYTHONPATH="${PYTHONPATH}:$(pwd)/RL2"
 
 torchrun \
     --nproc_per_node=8 \
     -m RL2.trainer.ppo \
-    train_data.path=null \
-    train_data.prompts_per_rollout=512 \
-    train_data.responses_per_prompt=1 \
+    train_data.prompts_per_rollout=128 \
+    test_data.prompts_per_rollout=1 \
     actor.model_name=Qwen/Qwen3-1.7B-Base \
-    actor.sp_size=2 \
     actor.max_length_per_device=8192 \
-    actor.tis_coef=2.0 \
-    actor.update_per_rollout=2 \
     actor.warmup_ratio=0.0 \
     actor.lr=1e-6 \
-    rollout.train_sampling_params.max_new_tokens=8192 \
-    rollout.train_sampling_params.temperature=1.0 \
-    rollout.env_path=async_env.py \
-    rollout.max_turns=16 \
-    rollout.dynamic_filtering=false \
-    adv.estimator=reinforce \
+    actor.update_per_rollout=2 \
+    rollout.train_sampling_params.max_new_tokens=1024 \
+    rollout.env_path=async_single_turn.py \
     adv.global_norm=true \
     adv.norm_var=true \
-    trainer.project=gem \
-    trainer.experiment_name=gem-qwen3-1.7b-reinforce-language-games \
-    trainer.n_epochs=500 \
-    trainer.test_freq=9999999 \
-    trainer.save_freq=64 \
-    trainer.use_wandb=true
+    trainer.project=GEM \
+    trainer.experiment_name=letter-counting_qwen3-1.7b_reinforce \
+    trainer.n_epochs=512 \
+    trainer.save_freq=64

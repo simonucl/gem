@@ -522,3 +522,7 @@ PYTHONUNBUFFERED=1 python -m examples.train_verl.train_verl \
 ## Training with OpenRLHF
 
 Please see [this doc](./train_openrlhf/README.md) for detailed instructions.
+
+## Training with RL2
+
+Please see [this doc](./train_rl2/README.md) for detailed instructions.
