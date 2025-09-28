@@ -19,8 +19,8 @@ from typing import Any, Dict
 import gem
 from gem.wrappers.wrapper_factory import get_wrapper_fns
 
-NUM_ENVS = 16
-GAME = "game:GuessTheNumber-v0"
+NUM_ENVS = 4
+GAME = "game:Sudoku-v0-random"
 WRAPPERS = "concat"
 PROMPT_TEMPLATE = "qwen3_general"
 
